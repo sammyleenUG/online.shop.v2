@@ -104,7 +104,7 @@ export default {
 
                         this.$store.dispatch("setLoggedInUser");
 
-                        this.goto('/products/explore');
+                        this.goto('/products/explore',true);
 
                     }else{
                         this.showErrorMessage(response.data.errors)

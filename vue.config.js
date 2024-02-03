@@ -12,7 +12,6 @@ module.exports = {
     resolve: {
       alias: {
         src: resolveSrc('src'),
-        'chart.js': 'chart.js/dist/Chart.js'
       }
     },
     devServer: {

@@ -180,9 +180,8 @@ export default {
                     () => {
                         localStorage.clear();
                         this.$store.dispatch('setLoggedInUser');
-                        this.$router.go();
+                        this.$router.goto('/products.explore',true);
                     })
-                    
                 }
             })
         },

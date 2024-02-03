@@ -70,11 +70,11 @@ export default {
 
         },
 
-        goto(url){
-            if(localStorage.getItem('auth'))
-                this.$router.push(url);
-            else{
+        goto(url,reload){
+            if(reload)
                 window.location.href = url;
+            else{
+                this.$router.push(url);
             }
         },
 
