@@ -177,11 +177,17 @@ export default {
             this.showWarningMessage("Proceeding will log you out of the app, sure to proceed?").then((result) => {
                 if(result.isConfirmed){
                     this.makePostRequest(`${config.admin_url}/api/client/logout`,{},
-                    () => {
-                        localStorage.clear();
-                        this.$store.dispatch('setLoggedInUser');
-                        this.$router.goto('/products.explore',true);
-                    })
+                        () => {
+                            localStorage.clear();
+                            this.$store.dispatch('setLoggedInUser');
+                            this.goto('/products.explore',true);
+                        },
+                        () => {
+                            localStorage.clear();
+                            this.$store.dispatch('setLoggedInUser');
+                            this.goto('/products.explore',true);
+                        }
+                    );
                 }
             })
         },

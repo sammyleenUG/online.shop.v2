@@ -29,6 +29,7 @@ export default {
                 })
                 .catch((error) => {
                     this.processing = false;
+                    this.destroyBlur();
 
                     if (typeof errorCallback === 'function') {
                         errorCallback(error);
@@ -51,6 +52,7 @@ export default {
                 })
                 .catch((error) => {
                     this.processing = false;
+                    this.destroyBlur();
 
                     if (typeof errorCallback === 'function') {
                         errorCallback(error);

@@ -3,10 +3,10 @@ import axios from "axios";
 import config from "./config.js";
 import request from "./request.js";
 import $ from 'jquery';
-
+import helpers from "./helpers.js";
 
 export default {
-    mixins: [sweetalert,request],
+    mixins: [sweetalert,request,helpers],
     data() {
         return {
 
@@ -36,7 +36,8 @@ export default {
                             this.showSuccessMessage("Added to cart!")
                         },
                     () => {
-                        this.showErrorMessage("Something happened, try again later!");
+                        this.goto('/auth/login#login')
+                        this.showErrorMessage("Login session expired");
                     });
             }
         },
@@ -62,7 +63,8 @@ export default {
                         this.showSuccessMessage("Added to wish list!")
                     },
                     () => {
-                        this.showErrorMessage("Something happened, try again later!");
+                        this.goto('/auth/login#login')
+                        this.showErrorMessage("Login session expired");
                     });
             }
 

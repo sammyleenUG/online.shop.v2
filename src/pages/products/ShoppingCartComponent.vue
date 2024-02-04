@@ -28,7 +28,7 @@
                                 </div>
                                 <div class="col-6">
                                     <a :href="formatUrl(item.product)" @click.prevent="goto(formatUrl(item.product))">
-                                        <h5>{{ item.product.name }}</h5>
+                                        <h5 v-if="item.product">{{ item.product.name }}</h5>
                                         {{ moneyFormat(item.product.discounted_price) }}
                                         <span class="text-muted" style="text-decoration: line-through">{{ moneyFormat(item.product.original_price)}}</span><br>
                                     </a>
@@ -77,7 +77,7 @@
                                                         <img :src="item.product.product_pictures[0].full_image_path" alt="" style="width: 100px;">
                                                     </div>
                                                     <div class="col-10" style="padding-right: 4rem;">
-                                                        <h5>{{ item.product.name }}</h5>
+                                                        <h5 v-if="item.product">{{ item.product.name }}</h5>
                                                     </div>
                                                 </div>
                                             </a>
@@ -142,7 +142,7 @@
                                 <li>Total <span>{{ moneyFormat($store.state.total) }}</span></li>
                             </ul>
                             <span v-if="$store.state.loggedInUser">
-                                <a :href="checkout" class="primary-btn" target="_child">
+                                <a href="/" class="primary-btn" @click.prevent="checkout()">
                                     PROCEED TO CHECKOUT
                                 </a>
                             </span>
@@ -176,10 +176,14 @@ import axios from "axios";
 
 import config from "../../mixins/config.js";
 
+import { ref, onUnmounted } from 'vue';
+
 export default {
     data() {
         return {
             berries:null,
+
+            newWindow: null,
         };
     },
     components: {
@@ -192,7 +196,7 @@ export default {
     mixins: [cathelper,helpers],
 
     computed:{
-        checkout(){
+        checkout_url(){
             if(this.$store.state.loggedInUser)
                 return `${config.checkout_url}/cl/${this.$store.state.loggedInUser.token}`
         }
@@ -219,6 +223,30 @@ export default {
                     Authorization: `Bearer ${this.$store.state.loggedInUser? this.$store.state.loggedInUser.token:null}`,
                 }
             });
+        },
+
+        checkout(){
+            const left = (window.innerWidth - 600) / 2;
+            const top = (window.innerHeight - 400) / 2;
+
+            // Open a new window with the specified URL and position
+            this.newWindow = window.open(this.checkout_url, '_blank', `width=600,height=400,left=${left},top=${top}`);
+
+            // Set up a message event listener on the parent window
+            window.addEventListener('message', this.messageHandler);
+
+            // Use onBeforeUnmount to remove the event listener when the component is unmounted
+            onUnmounted(() => {
+                window.removeEventListener('message', this.messageHandler);
+            });
+        },
+
+        messageHandler(event) {
+            // Check if the message is from the child window
+            if (event.source ===  this.newWindow) {
+                console.log('Message received!')
+                this.goto('/products/explore');
+            }
         },
     },
 

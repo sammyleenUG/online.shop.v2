@@ -25,7 +25,7 @@ export default {
 
         formatUrl(product){
             if(product)
-                return `/products/${product.id}/${this.transformString(product.name)}`;
+                return `/products/${product.id}/${this.transformString(product.name.toLowerCase())}`;
         },
 
         transformString(inputString) {
